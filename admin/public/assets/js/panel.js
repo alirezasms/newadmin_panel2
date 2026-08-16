@@ -715,7 +715,7 @@ const Topics = {
     const isEdit = !!t;
     const body = `
       <div class="field"><label>عنوان</label><input class="input" id="t_title" value="${isEdit ? escAttr(t.title) : ""}" /></div>
-      <div class="field"><label>لینک تصویر (سایز ۱۰۰۰ × ۳۱۱)</label><div class="upload-field"><input class="input" id="t_image" dir="ltr" placeholder="https://example.com/image.png" value="${isEdit ? escAttr(t.image) : ""}" /><button type="button" class="btn btn-secondary" id="t_upload">${ICONS.image} آپلود تصویر</button></div>${uploadProgressMarkup("t_upload_status")}</div>
+      <div class="field"><label>لینک تصویر (سایز ۱۰۰۰ × ۳۱۱)</label><div class="upload-field"><input class="input" id="t_image" dir="ltr" placeholder="https://example.com/image.png" value="${isEdit ? escAttr(t.image) : ""}" /><button type="button" class="btn btn-secondary" id="t_upload">${ICONS.image} آپلود تصویر</button></div></div>
       <div class="checkbox-row"><input type="checkbox" id="t_light" ${isEdit && String(t.image_is_light) === "1" ? "checked" : ""}/><label for="t_light">متن سفید باشد</label></div>
       <div class="field"><label>اولویت</label><input class="input mono" type="number" id="t_priority" value="${isEdit ? escAttr(t.priority) : "1"}" /></div>`;
     const overlay = openModal({
@@ -1086,7 +1086,7 @@ const Posts = {
         <textarea class="textarea" id="p_text" style="min-height:150px">${isEdit ? esc(p.text) : ""}</textarea>
       </div>
       <div class="field"><label>قیمت (تومان)</label><input class="input mono" type="number" id="p_pay" value="${isEdit ? escAttr(p.pay) : "0"}" /></div>
-      <div class="field"><label>ویدئوها (اختیاری)</label><div class="upload-field"><input class="input" id="p_videos" dir="ltr" placeholder='["p.mp4","p2.mp4"]' value="${isEdit ? escAttr(p.videos) : ""}" /><button type="button" class="btn btn-secondary" id="p_video_upload">آپلود ویدئو</button></div>${uploadProgressMarkup("p_video_status")}<div class="video-upload-list" id="p_video_list"></div></div>
+      <div class="field"><label>ویدئوها (اختیاری)</label><div class="upload-field"><input class="input" id="p_videos" dir="ltr" placeholder='["p.mp4","p2.mp4"]' value="${isEdit ? escAttr(p.videos) : ""}" /><button type="button" class="btn btn-secondary" id="p_video_upload">آپلود ویدئو</button></div><div class="video-upload-list" id="p_video_list"></div></div>
       <div class="field"><label>منابع (اختیاری)</label><input class="input" id="p_res" value="${isEdit ? escAttr(p.resources) : ""}" /></div>
       <div class="field">
         <label>دسته‌بندی</label>
