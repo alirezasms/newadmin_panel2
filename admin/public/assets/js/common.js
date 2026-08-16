@@ -53,6 +53,34 @@ async function apiPostAuth(params) {
   return apiPost(Object.assign({ token: getToken() }, params));
 }
 
+/* ---------------- آپلود فایل با پیشرفت ---------------- */
+function uploadFile(url, fieldName, file, onProgress) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    const form = new FormData();
+    form.append(fieldName, file);
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("token", getToken());
+    xhr.upload.addEventListener("progress", (event) => {
+      if (event.lengthComputable && onProgress) onProgress(Math.round((event.loaded / event.total) * 100));
+    });
+    xhr.addEventListener("load", () => {
+      let response;
+      try {
+        response = JSON.parse(xhr.responseText);
+      } catch (e) {
+        reject(new Error("پاسخ نامعتبر از سرور دریافت شد"));
+        return;
+      }
+      if (xhr.status >= 200 && xhr.status < 300 && response.success) resolve(response);
+      else reject(new Error(response.message || "آپلود انجام نشد"));
+    });
+    xhr.addEventListener("error", () => reject(new Error("خطا در ارتباط با سرور")));
+    xhr.addEventListener("abort", () => reject(new Error("آپلود لغو شد")));
+    xhr.send(form);
+  });
+}
+
 /* ---------------- ارقام فارسی ---------------- */
 const FA_DIGITS = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
 

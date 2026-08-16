@@ -57,8 +57,13 @@ function bindShell() {
   const sidebar = document.getElementById("sidebar");
   const backdrop = document.getElementById("backdrop");
   document.getElementById("menuToggle").addEventListener("click", () => {
-    sidebar.classList.toggle("open");
-    backdrop.classList.toggle("show");
+    const isMobile = window.matchMedia("(max-width: 860px)").matches;
+    if (isMobile) {
+      sidebar.classList.toggle("open");
+      backdrop.classList.toggle("show");
+    } else {
+      sidebar.classList.toggle("closed");
+    }
   });
   backdrop.addEventListener("click", () => {
     sidebar.classList.remove("open");
@@ -255,7 +260,7 @@ function confirmDialog(message, onConfirm, opts = {}) {
     body: `<p class="modal-text">${esc(message)}</p>`,
     footer: `
       <button class="btn ${opts.danger ? "btn-danger" : "btn-primary"}" data-confirm>${esc(
-      opts.confirmText || "بله، انجام بده"
+      opts.confirmText || "ب��ه، انجام بده"
     )}</button>
       <button class="btn btn-ghost" data-close>انصراف</button>`,
   });
@@ -291,6 +296,35 @@ function fval(overlay, id) {
   if (!el) return "";
   if (el.type === "checkbox") return el.checked ? "1" : "0";
   return el.value;
+}
+
+function uploadPicker({ accept, label, fieldName, url, onSuccess }) {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = accept;
+  input.addEventListener("change", async () => {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    const overlay = openModal({
+      title: label,
+      body: `<div class="upload-status"><div class="upload-file">${esc(file.name)}</div><div class="upload-progress"><span></span></div><div class="upload-percent">۰٪</div></div>`,
+      footer: `<button class="btn btn-ghost" data-close>بستن</button>`,
+    });
+    try {
+      const response = await uploadFile(url, fieldName, file, (percent) => {
+        overlay.querySelector(".upload-progress span").style.width = percent + "%";
+        overlay.querySelector(".upload-percent").textContent = toFa(percent) + "٪";
+      });
+      onSuccess(response, overlay, file);
+    } catch (e) {
+      showToast(e.message, "error");
+    }
+  });
+  input.click();
+}
+
+function uploadProgressMarkup(id) {
+  return `<div class="upload-inline" id="${id}"><span class="upload-inline-text"></span><div class="upload-progress"><span></span></div><small class="upload-percent">۰٪</small></div>`;
 }
 
 /* =========================================================
@@ -681,13 +715,26 @@ const Topics = {
     const isEdit = !!t;
     const body = `
       <div class="field"><label>عنوان</label><input class="input" id="t_title" value="${isEdit ? escAttr(t.title) : ""}" /></div>
-      <div class="field"><label>لینک تصویر (سایز ۱۰۰۰ × ۳۱۱)</label><input class="input" id="t_image" dir="ltr" placeholder="https://example.com/image.png" value="${isEdit ? escAttr(t.image) : ""}" /></div>
+      <div class="field"><label>لینک تصویر (سایز ۱۰۰۰ × ۳۱۱)</label><div class="upload-field"><input class="input" id="t_image" dir="ltr" placeholder="https://example.com/image.png" value="${isEdit ? escAttr(t.image) : ""}" /><button type="button" class="btn btn-secondary" id="t_upload">${ICONS.image} آپلود تصویر</button></div>${uploadProgressMarkup("t_upload_status")}</div>
       <div class="checkbox-row"><input type="checkbox" id="t_light" ${isEdit && String(t.image_is_light) === "1" ? "checked" : ""}/><label for="t_light">متن سفید باشد</label></div>
       <div class="field"><label>اولویت</label><input class="input mono" type="number" id="t_priority" value="${isEdit ? escAttr(t.priority) : "1"}" /></div>`;
     const overlay = openModal({
       title: isEdit ? "ویرایش موضوع" : "افزودن موضوع",
       body,
       footer: `<button class="btn btn-primary" data-save>${isEdit ? ICONS.edit + " ویرایش" : ICONS.plus + " افزودن"}</button><button class="btn btn-ghost" data-close>لغو</button>`,
+    });
+    overlay.querySelector("#t_upload").addEventListener("click", () => {
+      uploadPicker({
+        accept: "image/*",
+        label: "آپلود تصویر موضوع",
+        fieldName: "image",
+        url: "https://dls.drebadi.com/upload_image.php",
+        onSuccess: (response, uploadOverlay) => {
+          overlay.querySelector("#t_image").value = response.data.url;
+          showToast("آپلود با موفقیت انجام و لینک در کادر زیر قرار داده شد.");
+          uploadOverlay._close();
+        },
+      });
     });
     overlay.querySelector("[data-save]").addEventListener("click", async () => {
       const btn = overlay.querySelector("[data-save]");
@@ -1034,12 +1081,12 @@ const Posts = {
       <div class="field"><label>عنوان</label><input class="input" id="p_title" value="${isEdit ? escAttr(p.title) : ""}" /></div>
       <div class="field">
         <label style="display:flex;align-items:center;justify-content:space-between">متن
-          <button type="button" class="btn btn-sm btn-ghost" id="p_help">راهنمای تگ‌ها</button>
+          <span class="post-text-actions"><button type="button" class="btn btn-sm btn-ghost" id="p_help">راهنمای تگ‌ها</button><button type="button" class="btn btn-sm btn-secondary" id="p_image_upload">${ICONS.image} آپلود تصویر</button></span>
         </label>
         <textarea class="textarea" id="p_text" style="min-height:150px">${isEdit ? esc(p.text) : ""}</textarea>
       </div>
       <div class="field"><label>قیمت (تومان)</label><input class="input mono" type="number" id="p_pay" value="${isEdit ? escAttr(p.pay) : "0"}" /></div>
-      <div class="field"><label>ویدئوها (اختیاری)</label><input class="input" id="p_videos" dir="ltr" placeholder='["p.mp4","p2.mp4"]' value="${isEdit ? escAttr(p.videos) : ""}" /></div>
+      <div class="field"><label>ویدئوها (اختیاری)</label><div class="upload-field"><input class="input" id="p_videos" dir="ltr" placeholder='["p.mp4","p2.mp4"]' value="${isEdit ? escAttr(p.videos) : ""}" /><button type="button" class="btn btn-secondary" id="p_video_upload">آپلود ویدئو</button></div>${uploadProgressMarkup("p_video_status")}<div class="video-upload-list" id="p_video_list"></div></div>
       <div class="field"><label>منابع (اختیاری)</label><input class="input" id="p_res" value="${isEdit ? escAttr(p.resources) : ""}" /></div>
       <div class="field">
         <label>دسته‌بندی</label>
@@ -1057,6 +1104,44 @@ const Posts = {
     });
 
     overlay.querySelector("#p_help").addEventListener("click", helpTextDialog);
+    overlay.querySelector("#p_image_upload").addEventListener("click", () => {
+      uploadPicker({
+        accept: "image/*",
+        label: "آپلود تصویر پست",
+        fieldName: "image",
+        url: "https://dls.drebadi.com/upload_image.php",
+        onSuccess: (response, uploadOverlay) => {
+          const result = openModal({
+            title: "لینک تصویر",
+            body: `<p class="modal-text">آپلود با موفقیت انجام شد، لینک زیر را کپی کرده و در متن خود استفاده کنید</p><div class="copy-row"><input class="input" dir="ltr" readonly value="${escAttr(response.data.url)}" /><button class="btn btn-secondary" data-copy>${ICONS.check} کپی</button></div>`,
+            footer: `<button class="btn btn-ghost" data-close>بستن</button>`,
+          });
+          result.querySelector("[data-copy]").addEventListener("click", async () => {
+            await navigator.clipboard.writeText(response.data.url);
+            showToast("لینک تصویر کپی شد");
+          });
+          uploadOverlay._close();
+        },
+      });
+    });
+    overlay.querySelector("#p_video_upload").addEventListener("click", () => {
+      uploadPicker({
+        accept: "video/*",
+        label: "آپلود ویدئوی پست",
+        fieldName: "video",
+        url: "https://dls.drebadi.com/upload_video.php",
+        onSuccess: (response, uploadOverlay, file) => {
+          let videos = [];
+          try { videos = JSON.parse(overlay.querySelector("#p_videos").value || "[]"); } catch (e) {}
+          if (!Array.isArray(videos)) videos = [];
+          videos.push(response.data.filename || file.name);
+          overlay.querySelector("#p_videos").value = JSON.stringify(videos);
+          overlay.querySelector("#p_video_list").insertAdjacentHTML("beforeend", `<span class="badge badge-muted">${esc(response.data.filename || file.name)}</span>`);
+          showToast("ویدئو با موفقیت آپلود شد");
+          uploadOverlay._close();
+        },
+      });
+    });
     overlay.querySelector("#p_cat").addEventListener("click", () => {
       CategoryPicker.open((sel) => {
         chosen = sel;

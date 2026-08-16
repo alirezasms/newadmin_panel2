@@ -645,6 +645,69 @@ table.data tbody tr:hover {
   margin: 6px 0 2px;
 }
 
+.upload-field,
+.post-text-actions,
+.copy-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.upload-field .input,
+.copy-row .input {
+  flex: 1;
+  min-width: 0;
+}
+.upload-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 22px;
+  margin-top: 8px;
+  color: var(--text-muted);
+}
+.upload-inline:empty,
+.upload-inline-text:empty {
+  display: none;
+}
+.upload-inline .upload-progress {
+  flex: 1;
+}
+.upload-progress {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+.upload-progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.12s ease;
+}
+.upload-status {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.upload-file {
+  font-size: 13px;
+  direction: ltr;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.upload-percent {
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+.video-upload-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
 /* ---------- توست ---------- */
 .toast-stack {
   position: fixed;
