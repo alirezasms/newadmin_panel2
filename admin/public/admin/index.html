@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" class="bg-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0d9488" />
+    <title>ورود به پنل مدیریت | دکتر عبادی تالش</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+     <link rel="icon" type="image/png" href="https://drebadi.com/public/files/logo.png">
+    <style>
+      html.bg-page,
+      body {
+        background: radial-gradient(circle at 15% 0%, #ccfbf1 0%, transparent 45%),
+          radial-gradient(circle at 100% 100%, #cffafe 0%, transparent 45%), #f1f5f9;
+      }
+      .auth-wrap {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 16px;
+      }
+      .auth-card {
+        width: 100%;
+        max-width: 420px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        box-shadow: var(--shadow-lg);
+        padding: 38px 32px 32px;
+      }
+      .brand {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 14px;
+        margin-bottom: 28px;
+      }
+      .brand .logo {
+        width: 66px;
+        height: 66px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        box-shadow: 0 12px 26px -8px rgba(8, 145, 178, 0.6);
+      }
+      .brand h1 {
+        font-size: 19px;
+        font-weight: 800;
+        line-height: 1.7;
+        color: var(--text);
+      }
+      .brand p {
+        font-size: 13.5px;
+        color: var(--text-muted);
+      }
+      .input-with-icon {
+        position: relative;
+      }
+      .input-with-icon svg {
+        position: absolute;
+        right: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-soft);
+      }
+      .input-with-icon input {
+        padding-right: 42px;
+      }
+      .auth-footer {
+        margin-top: 26px;
+        text-align: center;
+        font-size: 12.5px;
+        color: var(--text-muted);
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .auth-footer .line {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .auth-footer .heart {
+        color: var(--primary);
+      }
+      .auth-footer .copy {
+        padding-top: 12px;
+        border-top: 1px dashed var(--border);
+        color: var(--text-soft);
+      }
+      .checking-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(241, 245, 249, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 50;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- بررسی توکن کوکی هنگام ورود -->
+    <div class="checking-overlay" id="checkingOverlay">
+      <div class="loader"><span class="spinner"></span> در حال بررسی ورود...</div>
+    </div>
+
+    <div class="auth-wrap" id="authWrap" style="display: none">
+      <div class="auth-card">
+        <div class="brand">
+          <div class="logo">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            </svg>
+          </div>
+          <h1 class="text-balance">ورود به پنل مدیریت اپلیکیشن دکتر عبادی تالش</h1>
+          <p>برای ادامه، نام کاربری و رمز عبور خود را وارد کنید</p>
+        </div>
+
+        <form id="loginForm" autocomplete="off">
+          <div class="field">
+            <label for="username">نام کاربری</label>
+            <div class="input-with-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <input class="input" type="text" id="username" name="username" placeholder="نام کاربری" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="password">رمز عبور</label>
+            <div class="input-with-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input class="input" type="password" id="password" name="password" placeholder="رمز عبور" required />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
+            <span id="loginBtnText">ورود به پنل</span>
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <div class="line">
+            ساخته شده با
+            <span class="heart">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            </span>
+            توسط<a href="https://t.me/cafetoseeh">کافه توسعه</a>
+          </div>
+          <div class="copy">© تمامی حقوق نزد این سایت محفوظ است.</div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../assets/js/common.js"></script>
+    <script>
+      const checkingOverlay = document.getElementById("checkingOverlay");
+      const authWrap = document.getElementById("authWrap");
+      const loginForm = document.getElementById("loginForm");
+      const loginBtn = document.getElementById("loginBtn");
+      const loginBtnText = document.getElementById("loginBtnText");
+
+      function showForm() {
+        checkingOverlay.style.display = "none";
+        authWrap.style.display = "flex";
+      }
+
+      function goToPanel() {
+        window.location.href = "../adminpanel/";
+      }
+
+      // اگر توکن در کوکی بود، با ac=2 اعتبارسنجی شود
+      async function checkExistingToken() {
+        const token = getToken();
+        if (!token) {
+          showForm();
+          return;
+        }
+        try {
+          const resp = await apiPost({ ac: 2, token });
+          if (resp && resp.success) {
+            goToPanel();
+          } else {
+            deleteCookie("admin_token");
+            showForm();
+          }
+        } catch (e) {
+          console.log("[v0] خطا در بررسی توکن:", e.message);
+          showForm();
+        }
+      }
+
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value;
+        if (!username || !password) return;
+
+        loginBtn.disabled = true;
+        loginBtnText.textContent = "در حال ورود...";
+
+        try {
+          const resp = await apiPost({ ac: 1, username, password });
+          if (resp && resp.success && resp.token) {
+            setCookie("admin_token", resp.token, 30);
+            showToast("ورود موفقیت‌آمیز بود", "success", 1500);
+            setTimeout(goToPanel, 600);
+          } else {
+            showToast("نام کاربری یا رمز عبور صحیح نیست", "error");
+            loginBtn.disabled = false;
+            loginBtnText.textContent = "ورود به پنل";
+          }
+        } catch (err) {
+          showToast("خطا در ارتباط با سرور", "error");
+          loginBtn.disabled = false;
+          loginBtnText.textContent = "ورود به پنل";
+        }
+      });
+
+      checkExistingToken();
+    </script>
+  </body>
+</html>

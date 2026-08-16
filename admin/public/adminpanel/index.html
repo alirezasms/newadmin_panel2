@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" class="bg-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0d9488" />
+    <title>پنل مدیریت | دکتر عبادی تالش</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+       <link rel="icon" type="image/png" href="https://drebadi.com/public/files/logo.png">
+    <style>
+      html.bg-page,
+      body {
+        background: var(--bg);
+      }
+      .app {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      /* ---------- نوار بالا ---------- */
+      .topbar {
+        height: 64px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 18px;
+        position: sticky;
+        top: 0;
+        z-index: 30;
+      }
+      .topbar .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .topbar .brand .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        flex-shrink: 0;
+      }
+      .topbar .brand .titles b {
+        font-size: 15px;
+        font-weight: 800;
+        display: block;
+      }
+      .topbar .brand .titles span {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+      .menu-toggle {
+        display: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text);
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* پروفایل سمت چپ */
+      .profile {
+        position: relative;
+      }
+      .profile-btn {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 6px 12px 6px 8px;
+        border: 1px solid var(--border);
+        background: var(--surface-2);
+        border-radius: 999px;
+        color: var(--text);
+        transition: all 0.15s ease;
+      }
+      .profile-btn:hover {
+        border-color: var(--primary);
+      }
+      .profile-btn .avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--secondary), var(--primary));
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .profile-btn .pname {
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .profile-menu {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        min-width: 190px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        box-shadow: var(--shadow-lg);
+        padding: 8px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: all 0.18s ease;
+        z-index: 40;
+      }
+      .profile-menu.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      .profile-menu .pm-head {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 6px;
+      }
+      .profile-menu .pm-head b {
+        font-size: 13.5px;
+      }
+      .profile-menu .pm-head span {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+      .profile-menu button {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 12px;
+        border: none;
+        background: transparent;
+        border-radius: 9px;
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--danger);
+      }
+      .profile-menu button:hover {
+        background: var(--danger-light);
+      }
+
+      /* ---------- بدنه ---------- */
+      .body-row {
+        flex: 1;
+        display: flex;
+        align-items: stretch;
+      }
+
+      /* منوی سمت راست */
+      .sidebar {
+        width: 256px;
+        flex-shrink: 0;
+        background: var(--surface);
+        border-inline-start: 1px solid var(--border);
+        padding: 18px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .sidebar .nav-label {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--text-soft);
+        padding: 6px 12px;
+        letter-spacing: 0.02em;
+      }
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 14px;
+        border-radius: 12px;
+        color: var(--text-muted);
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.15s ease;
+        border: 1px solid transparent;
+      }
+      .nav-item:hover {
+        background: var(--surface-2);
+        color: var(--text);
+      }
+      .nav-item.active {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: #fff;
+        box-shadow: 0 8px 18px -8px rgba(8, 145, 178, 0.6);
+      }
+      .nav-item .ic {
+        display: flex;
+        flex-shrink: 0;
+      }
+
+      /* محتوای سمت چپ */
+      .content {
+        flex: 1;
+        padding: 24px;
+        min-width: 0;
+        overflow-x: hidden;
+      }
+      .page-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+      .page-head h2 {
+        font-size: 20px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .page-head h2 .ph-ic {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .toolbar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+      }
+      .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+        font-size: 13px;
+        margin-bottom: 16px;
+        color: var(--text-muted);
+      }
+      .breadcrumb button {
+        border: none;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--secondary-dark);
+      }
+      .breadcrumb button:hover {
+        border-color: var(--secondary);
+      }
+      .breadcrumb .sep {
+        color: var(--text-soft);
+      }
+      .breadcrumb .current {
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .checking-overlay {
+        position: fixed;
+        inset: 0;
+        background: var(--bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+      }
+
+      .backdrop {
+        display: none;
+      }
+
+      /* ---------- موبایل ---------- */
+      @media (max-width: 860px) {
+        .menu-toggle {
+          display: flex;
+        }
+        .sidebar {
+          position: fixed;
+          top: 64px;
+          right: 0;
+          bottom: 0;
+          z-index: 60;
+          transform: translateX(100%);
+          transition: transform 0.25s ease;
+          box-shadow: var(--shadow-lg);
+        }
+        .sidebar.open {
+          transform: translateX(0);
+        }
+        .backdrop.show {
+          display: block;
+          position: fixed;
+          inset: 64px 0 0 0;
+          background: rgba(15, 23, 42, 0.4);
+          z-index: 55;
+        }
+        .topbar .brand .titles span {
+          display: none;
+        }
+        .content {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="checking-overlay" id="checkingOverlay">
+      <div class="loader"><span class="spinner"></span> در حال بررسی دسترسی...</div>
+    </div>
+
+    <div class="app" id="app" style="display: none">
+      <!-- نوار بالا -->
+      <header class="topbar">
+        <div class="brand">
+          <button class="menu-toggle" id="menuToggle" aria-label="منو">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+          </button>
+          <div class="logo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          </div>
+          <div class="titles">
+            <b>پنل مدیریت</b>
+            <span>اپلیکیشن دکتر عبادی تالش</span>
+          </div>
+        </div>
+
+        <div class="profile">
+          <button class="profile-btn" id="profileBtn">
+            <span class="avatar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </span>
+            <span class="pname">مدیر سیستم</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="profile-menu" id="profileMenu">
+            <div class="pm-head">
+              <b>مدیر سیستم</b>
+              <span>خوش آمدید</span>
+            </div>
+            <button id="logoutBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+              خروج از حساب
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div class="body-row">
+        <!-- منوی سمت راست -->
+        <aside class="sidebar" id="sidebar">
+          <span class="nav-label">منوی مدیریت</span>
+          <a class="nav-item" data-section="users">
+            <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+            مدیریت کاربران
+          </a>
+          <a class="nav-item" data-section="receipts">
+            <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></span>
+            رسیدهای پرداخت
+          </a>
+          <a class="nav-item" data-section="topics">
+            <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></span>
+            مدیریت موضوعات
+          </a>
+          <a class="nav-item" data-section="posts">
+            <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></span>
+            مدیریت پست‌ها
+          </a>
+          <a class="nav-item" data-section="notifications">
+            <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span>
+            اطلاعیه‌ها
+          </a>
+          <a class="nav-item" data-section="settings">
+            <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            تنظیمات اپلیکیشن
+          </a>
+          <a class="nav-item" data-section="stats">
+            <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg></span>
+            آمار
+          </a>
+        </aside>
+
+        <div class="backdrop" id="backdrop"></div>
+
+        <!-- محتوا -->
+        <main class="content" id="content">
+          <!-- حالت اولیه: انتخاب آیتم -->
+          <div class="empty-state" id="welcome">
+            <div class="empty-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </div>
+            <h3>به پنل مدیریت خوش آمدید</h3>
+            <p>لطفاً یک آیتم را از منوی سمت راست انتخاب کنید تا مدیریت آن در همین بخش نمایش داده شود.</p>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- محل قرارگیری دیالوگ‌ها -->
+    <div id="modalRoot"></div>
+
+    <script src="../assets/js/common.js"></script>
+    <script src="../assets/js/panel.js"></script>
+  </body>
+</html>
